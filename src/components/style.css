@@ -25,11 +25,11 @@ a:focus {
 }
 
 .navbar {
-    padding: 15px 10px;
+    /* padding: 15px 10px; */
     background: #fff;
     border: none;
     border-radius: 0;
-    margin-bottom: 40px;
+    margin-bottom: 15px;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -62,6 +62,9 @@ a:focus {
     background: #7386D5;
     color: #fff;
     transition: all 0.3s;
+    height: 600px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 #sidebar.active {
@@ -146,6 +149,8 @@ a.article:hover {
 ----------------------------------------------------- */
 
 #content {
+    overflow-y: hidden;
+    height: 100vh;
     width: 100%;
     padding: 20px;
     min-height: 100vh;
@@ -171,8 +176,21 @@ a.article:hover {
 .header-menu {
     position: sticky;
 }
-.user-chat {
+
+.user-content {
+    height: 445px; 
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.sidebar-title {
     position: relative;
-    top: 23%;
-    right: 1%;
+    top: 2%;
+    left: 10%;
+    height: 50px;
+}
+
+.user-div {
+    position: relative;
+    left: 2%;
 }

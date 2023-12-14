@@ -1,20 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { GetApiService, PostApiService } from "../Apis/ApiService";
 
 const Sidebar = () => {
 
     const [menuList, setMenuList] = useState([]);
     const [subMenuList, setSubMenuList] = useState([]);
+    const loginUserId = sessionStorage.getItem("userId");
+    const { chatId } = useParams();
+    const [menuId, setMenuId] = useState("");
 
     useEffect(() => {
         fetchMenus('/ProjectApis/v1/chatMenus');
     }, []);
 
+    useEffect(() => {
+        getUserDataByChatId();
+    }, [chatId]);
+
+    const getUserDataByChatId = async () => {
+        const url = '/ProjectApis/v1/userDataByChatId';
+        const body = JSON.stringify({
+            chat_id: chatId
+        });
+
+        await PostApiService(url, body).then((data) => {
+            var response = data.chat;
+            console.log("response", response)
+            if (data.status === 1) {
+                setMenuId(response[0]['chat_type_id']);
+            }
+        })
+    }
+
     const fetchMenus = async (url) => {
         try {
 
-            await GetApiService(url).then((data) => {
+            const body = JSON.stringify({
+                user_id: loginUserId
+            });
+
+            await PostApiService(url, body).then((data) => {
                 console.log("list", data);
                 console.log("menus", data.menus);
                 console.log("sub menus", data.menus[0].sub_menus);
@@ -32,63 +58,36 @@ const Sidebar = () => {
     return (
         <>
             <div className="sidebar-header">
-                <h3>User Chat</h3>
+
+                <ul className="list-unstyled components">
+                    {
+                        menuList.map((menu) => (
+                            <li className="active" key={menu.id}>
+                                <a href={`#${menu.name}`} data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">{menu.name}</a>
+                                <ul className={menuId !== menu.id ? "collapse list-unstyled" : "list-unstyled"} id={menu.name}>
+                                    {
+                                        menu.sub_menus.map((submenu) => (
+
+                                            <li key={submenu.sub_menu_id}>
+                                                {
+                                                    chatId === submenu.sub_menu_id ? (<Link to={`/user-chat/${submenu.sub_menu_id}`} style={{background: "grey"}}>{loginUserId !== submenu.user_id ? submenu.sub_menu : submenu.sub_menu + " (You)"}</Link>) : (<Link to={`/user-chat/${submenu.sub_menu_id}`} >{loginUserId !== submenu.user_id ? submenu.sub_menu : submenu.sub_menu + " (You)"}</Link>)
+                                                }
+                                            </li>
+
+
+                                        ))
+                                    }
+
+                                </ul>
+
+                            </li>
+                        ))
+                    }
+
+                </ul>
             </div>
 
-            <ul className="list-unstyled components">
-                <p>Dummy Heading</p>
-                {
-                    menuList.map((menu) => (
-                        <li className="active" key={menu.id}>
-                            <a href={`#${menu.name}`} data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">{menu.name}</a>
-                            <ul className="collapse list-unstyled" id={menu.name}>
-                                {
-                                    menu.sub_menus.map((submenu) => (
 
-                                        <li key={submenu.sub_menu_id}>
-                                            <Link to={`/user-chat/${submenu.sub_menu_id}`}>{submenu.sub_menu}</Link>
-                                        </li>
-
-
-                                    ))
-                                }
-
-                            </ul>
-
-                        </li>
-                    ))
-                }
-                {/* <li className="active">
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">Groups</a>
-                    <ul className="collapse list-unstyled" id="homeSubmenu">
-                        <li>
-                            <Link to="/user-chat/1">Home 1</Link>
-                        </li>
-                        <li>
-                            <Link to="/user-chat/2">Home 2</Link>
-                        </li>
-                        <li>
-                            <Link to="/user-chat/3">Home 3</Link>
-                        </li>
-                    </ul>
-                </li>
-
-                <li>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">Indivisual</a>
-                    <ul className="collapse list-unstyled" id="pageSubmenu">
-                        <li>
-                            <a href="#">Page 1</a>
-                        </li>
-                        <li>
-                            <a href="#">Page 2</a>
-                        </li>
-                        <li>
-                            <a href="#">Page 3</a>
-                        </li>
-                    </ul>
-                </li> */}
-
-            </ul>
         </>
 
 
