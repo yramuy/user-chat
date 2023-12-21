@@ -9,6 +9,7 @@ const UserChat = () => {
     const { chatId } = useParams();
     const senderId = sessionStorage.getItem('userId');
     const [chatList, setChatList] = useState([]);
+    
 
     useEffect(() => {
         getUserDataByChatId();

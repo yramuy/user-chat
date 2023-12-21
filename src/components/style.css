@@ -62,7 +62,7 @@ a:focus {
     background: #7386D5;
     color: #fff;
     transition: all 0.3s;
-    height: 600px;
+    height: auto;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -177,10 +177,20 @@ a.article:hover {
     position: sticky;
 }
 
-.user-content {
-    height: 445px; 
-    overflow-y: scroll;
-    overflow-x: hidden;
+@media (min-height: 593px) {
+    .user-content {
+        height: 430px; 
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+}
+
+@media (min-height: 953px) {
+    .user-content {
+        height: 790px; 
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
 }
 
 .sidebar-title {

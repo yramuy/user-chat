@@ -68,6 +68,8 @@ const Layout = ({ children }) => {
 
     }
 
+    // const windowSize = useRef([window.innerWidth, window.innerHeight]);
+
     return (
         <>
             <div className="wrapper">
