@@ -41,8 +41,8 @@ const Header = () => {
                                 <img src={userLoginImg} alt="Avatar" style={{ width: "20px", height: "30px" }} />
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{ left: '-6rem' }}>
-                                <a className="dropdown-item" href="#">Profile</a>
-                                <a className="dropdown-item" href="#" onClick={handleLogout}>Logout</a>
+                                <a className="dropdown-item" href="#"><i class="fa-solid fa-user"></i> Profile</a>
+                                <a className="dropdown-item" href="#" onClick={handleLogout}><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
                             </div>
                         </div>
                     </li>
