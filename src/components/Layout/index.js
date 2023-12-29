@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../components/style.css";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
@@ -68,7 +68,9 @@ const Layout = ({ children }) => {
 
     }
 
-    // const windowSize = useRef([window.innerWidth, window.innerHeight]);
+    const windowSize = useRef([window.innerWidth, window.innerHeight]);
+
+    console.log("window height ", windowSize.current[1])
 
     return (
         <>

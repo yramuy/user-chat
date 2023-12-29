@@ -177,9 +177,9 @@ a.article:hover {
     position: sticky;
 }
 
-@media (min-height: 593px) {
+@media (min-height: 252px) {
     .user-content {
-        height: 430px; 
+        height: 425px; 
         overflow-y: scroll;
         overflow-x: hidden;
     }
@@ -207,7 +207,21 @@ a.article:hover {
 
 .MuiPaper-root {
     width: 100%;
-    height: 500px;
+    height: 350px;
     top: 22px;
     left: 100px;
 }
+
+.first-division button {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+    color: rgb(0, 208, 255);
+    border: 1px solid rgb(0, 208, 255);
+  }
+  
+  .second-division button {
+    color: red;
+    border: 1px solid red;
+  }

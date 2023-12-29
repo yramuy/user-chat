@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
+import { GetApiService } from "../Apis/ApiService";
 
 const Header = () => {
 
@@ -9,6 +10,31 @@ const Header = () => {
 
     const [open, setOpen] = useState(false);
     const [menu, setMenu] = useState(false);
+    const [selectedValue, setSelectedValue] = useState('');
+    const [menus, setMenus] = useState([]);
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        GetMenus();
+        GetUserList();
+    }, []);
+
+    const GetMenus = async () => {
+        const url = '/ProjectApis/v1/menuList';
+
+        await GetApiService(url).then((data) => {
+            console.log('menus : ', data.menu)
+            setMenus(data.menu);
+        });
+    }
+
+    const GetUserList = async () => {
+        const url = '/ProjectApis/v1/usersList';
+        await GetApiService(url).then((data) => {
+            console.log('users : ', data.users)
+            setUsers(data.users);
+        });
+    }
 
     const handleLogout = () => {
         setOpen(true);
@@ -33,7 +59,21 @@ const Header = () => {
 
     const handleAddMenu = () => {
         setMenu(true);
+        setSelectedValue('1');
     }
+
+    const handleCancel = () => {
+        setMenu(false);
+        setSelectedValue('');
+    }
+
+    const handleRadioButton = (e) => {
+        setSelectedValue(e.target.value);
+
+        console.log('selected value : ', e.target.value)
+    }
+
+    console.log('default checked : ', { selectedValue })
 
     return (
         <>
@@ -79,46 +119,83 @@ const Header = () => {
                 open={menu}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description">
+                aria-describedby="alert-dialog-description" id="menu-dialog">
                 <DialogTitle id="alert-dialog-title">
                     {"Add Menu"}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        <div class="row">
+                        <div class="row mt-3">
                             <div class="col-4">
                                 <label for="exampleDataList" class="form-label">Menu</label>
                             </div>
                             <div class="col-5">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" />
-                                    <label class="form-check-label" for="inlineRadio1">Groups</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" />
-                                    <label class="form-check-label" for="inlineRadio2">Individual</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4"><label for="exampleDataList" class="form-label">Sub Menu</label></div>
-                            <div class="col-5">
+                                {
+                                    menus.map((res) => (
+                                        <div class="form-check form-check-inline" key={res.id}>
+                                            <input class="form-check-input"
+                                                type="radio"
+                                                name="inlineRadioOptions"
+                                                value={res.id}
+                                                checked={selectedValue === res.id}
+                                                onChange={handleRadioButton}
+                                            />
+                                            <label class="form-check-label" for="inlineRadio1">{res.name}</label>
+                                        </div>
+                                    ))
+                                }
 
-                                <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search..." />
-                                <datalist id="datalistOptions">
-                                    <option value="San Francisco" />
-                                    <option value="New York" />
-                                    <option value="Seattle" />
-                                    <option value="Los Angeles" />
-                                    <option value="Chicago" />
-                                </datalist>
                             </div>
                         </div>
+                        {
+                            selectedValue === '1' ? (
+                                <div class="row mt-3">
+                                    <div class="col-4"><label for="exampleDataList" class="form-label">Group Menu</label></div>
+                                    <div class="col-5">
+                                        <input class="form-control" id="exampleDataList" placeholder="Enter Submenu name" />
+                                    </div>
+                                </div>
+
+                            ) : (
+                                <div class="row mt-3">
+                                    <div class="col-4"><label for="exampleDataList" class="form-label">Individual Menu</label></div>
+                                    <div class="col-5 first-division">
+                                        <select class="form-control" name="user_menu">
+                                            <option value="">--Select User--</option>
+                                            {
+                                                users.map((user) => (
+                                                    <option value={user.id}>{user.full_name}</option>
+                                                ))
+                                            }
+                                        </select>
+                                        <button
+                                            type="button"
+                                            onClick={{}}
+                                            className="add-btn"
+                                        >
+                                            <span>Add User</span>
+                                        </button>
+                                    </div>
+                                    <div class="col-2 second-division">
+                                        <button
+                                            type="button"
+                                            onClick={{}}
+                                            className="remove-btn"
+                                        >
+                                            <span>Remove</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            )
+                        }
+
+
+
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <button type="button" class="btn btn-success" onClick={handleYes} autoFocus>Save</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onClick={handleClose}>Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onClick={handleCancel}>Cancel</button>
                 </DialogActions>
             </Dialog>
 
