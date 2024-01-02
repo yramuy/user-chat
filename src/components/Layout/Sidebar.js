@@ -70,7 +70,9 @@ const Sidebar = () => {
 
                                             <li key={submenu.sub_menu_id}>
                                                 {
-                                                    chatId === submenu.sub_menu_id ? (<Link to={`/user-chat/${submenu.sub_menu_id}`} style={{background: "darkslategray"}}>{loginUserId !== submenu.user_id ? submenu.sub_menu : submenu.sub_menu + " (You)"}</Link>) : (<Link to={`/user-chat/${submenu.sub_menu_id}`} >{loginUserId !== submenu.user_id ? submenu.sub_menu : submenu.sub_menu + " (You)"}</Link>)
+                                                    chatId === submenu.sub_menu_id ?
+                                                        (<Link to={`/user-chat/${submenu.sub_menu_id}`} style={{ background: "darkslategray" }}>{loginUserId !== submenu.user_id ? submenu.sub_menu : submenu.sub_menu + " (You)"}</Link>) :
+                                                        (<Link to={`/user-chat/${submenu.sub_menu_id}`} >{loginUserId !== submenu.user_id ? submenu.sub_menu : submenu.sub_menu + " (You)"}</Link>)
                                                 }
                                             </li>
 

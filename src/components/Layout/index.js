@@ -77,7 +77,7 @@ const Layout = ({ children }) => {
             <div className="wrapper">
                 {/* <!-- Sidebar  --> */}
                 <nav id="sidebar" className={isActive ? 'active' : ""}>
-                    <div className="sidebar-title">
+                    <div className="sidebar-title" style={{position: "sticky"}}>
                         <h3>User Chat</h3>
                     </div>
 

@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
-import { GetApiService } from "../Apis/ApiService";
+import { GetApiService, PostApiService } from "../Apis/ApiService";
 
 const Header = () => {
 
     const userLoginImg = sessionStorage.getItem('userImg');
     const navigate = useNavigate();
+    const loginIUserId = sessionStorage.getItem('userId');
 
     const [open, setOpen] = useState(false);
     const [menu, setMenu] = useState(false);
     const [selectedValue, setSelectedValue] = useState('');
     const [menus, setMenus] = useState([]);
     const [users, setUsers] = useState([]);
+    const [usersList, setUsersList] = useState([{ user: "" }]);
+    const [groupMenu, setGroupMenu] = useState("");
+    const { chatId } = useParams();
 
     useEffect(() => {
         GetMenus();
@@ -70,10 +74,75 @@ const Header = () => {
     const handleRadioButton = (e) => {
         setSelectedValue(e.target.value);
 
+        if (e.target.value === '1') {
+            setUsersList([{ user: "" }]);
+        }
+
+        setGroupMenu("");
+
         console.log('selected value : ', e.target.value)
     }
 
+    const mystyle1 = {
+        display: "flex",
+        marginLeft: "12rem",
+        marginTop: "-1.7rem"
+    };
+    const mystyle2 = {
+        display: "flex",
+        marginLeft: "12rem",
+        marginTop: "1.3rem"
+    };
+
     console.log('default checked : ', { selectedValue })
+
+    const addRow = () => {
+        setUsersList([...usersList, { user: "" }]);
+    }
+
+    const handleUserChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...usersList];
+        list[index][name] = value;
+        setUsersList(list);
+    }
+
+    console.log("userslist : ", usersList)
+
+    const removeRow = (index) => {
+
+        const list = [...usersList];
+        // console.log("index", index)
+        console.log("List", list)
+        // // At position 2, remove 2 items: 
+        list.splice(index, 1);
+        // const newList = list.filter((item, index) => index !== index1);
+        setUsersList(list);
+    }
+
+    const handleSave = async (e) => {
+
+        e.preventDefault();
+
+        const url = '/ProjectApis/v1/saveMenu';
+        const body = JSON.stringify({
+            menuId: selectedValue,
+            groupMenu: groupMenu,
+            loginId: loginIUserId,
+            individualMenu: usersList
+
+        });
+
+        console.log(body)
+
+        await PostApiService(url, body).then((data) => {
+
+            if (data.status === 1) {
+                window.location.replace(`/user-chat/${chatId}`);
+            }
+        });
+
+    }
 
     return (
         <>
@@ -148,53 +217,77 @@ const Header = () => {
                             </div>
                         </div>
                         {
-                            selectedValue === '1' ? (
+                            selectedValue === '1' && (
                                 <div class="row mt-3">
                                     <div class="col-4"><label for="exampleDataList" class="form-label">Group Menu</label></div>
                                     <div class="col-5">
-                                        <input class="form-control" id="exampleDataList" placeholder="Enter Submenu name" />
+                                        <input class="form-control"
+                                            id="exampleDataList"
+                                            placeholder="Enter Submenu name"
+                                            value={groupMenu}
+                                            onChange={(e) => setGroupMenu(e.target.value)}
+                                        />
                                     </div>
                                 </div>
 
-                            ) : (
-                                <div class="row mt-3">
-                                    <div class="col-4"><label for="exampleDataList" class="form-label">Individual Menu</label></div>
-                                    <div class="col-5 first-division">
-                                        <select class="form-control" name="user_menu">
-                                            <option value="">--Select User--</option>
-                                            {
-                                                users.map((user) => (
-                                                    <option value={user.id}>{user.full_name}</option>
-                                                ))
-                                            }
-                                        </select>
-                                        <button
-                                            type="button"
-                                            onClick={{}}
-                                            className="add-btn"
-                                        >
-                                            <span>Add User</span>
-                                        </button>
-                                    </div>
-                                    <div class="col-2 second-division">
-                                        <button
-                                            type="button"
-                                            onClick={{}}
-                                            className="remove-btn"
-                                        >
-                                            <span>Remove</span>
-                                        </button>
-                                    </div>
-                                </div>
                             )
                         }
+
+                        <div class="row mt-3">
+                            <div class="col-4"><label for="exampleDataList" class="form-label">Users</label></div>
+
+                            {
+                                usersList.map((singleUser, index) => (
+                                    <div className="services" style={index === 0 ? mystyle1 : mystyle2}>
+                                        <div class="col-7 first-division">
+                                            <select class="form-control" name="user_id" onChange={(e) => handleUserChange(e, index)}>
+                                                <option value="">--Select User--</option>
+                                                {
+                                                    users.map((user) => (
+                                                        <option value={user.id}>{user.full_name}</option>
+                                                    ))
+                                                }
+                                            </select>
+
+
+                                        </div>
+                                        {
+                                            index === 0 ? (<div class="col-2 first-division">
+                                                <button
+                                                    type="button"
+                                                    onClick={addRow}
+                                                    className="btn-success"
+                                                >
+                                                    <span><i class="fa-solid fa-plus"></i></span>
+                                                </button>
+                                            </div>) : (
+                                                <div class="col-2 second-division">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeRow(index)}
+                                                        className="remove-btn"
+                                                    >
+                                                        <span><i class="fa-solid fa-minus"></i></span>
+                                                    </button>
+                                                </div>
+                                            )
+                                        }
+
+                                    </div>
+                                ))
+                            }
+
+
+
+                        </div>
+
 
 
 
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <button type="button" class="btn btn-success" onClick={handleYes} autoFocus>Save</button>
+                    <button type="button" class="btn btn-success" onClick={handleSave} autoFocus>Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onClick={handleCancel}>Cancel</button>
                 </DialogActions>
             </Dialog>
