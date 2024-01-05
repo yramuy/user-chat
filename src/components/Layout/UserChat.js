@@ -52,7 +52,7 @@ const UserChat = () => {
             }
         });
 
-        console.log("chat body", body)
+        console.log("chat chatList", chatList)
     }
 
     return (
@@ -66,7 +66,15 @@ const UserChat = () => {
                             </div>
                             <div className="col-5">
                                 <div style={{display:'flex', gap:'10px'}}><span>{chat.full_name}</span><span style={{opacity: '0.5'}}>{chat.chat_time}</span></div>
-                                <p style={{ inlineSize: "670px", overflowWrap: "break-word" }}>{chat.message}</p>
+                                {
+                                    chat.file_status === '0' ? (
+                                        <p style={{ inlineSize: "670px", overflowWrap: "break-word" }}>{chat.message}</p>
+                                    ) : (
+                                        <embed type="application/pdf" src={chat.user_chat_file} width="500px" height="250px" alt="pdf" background-color="0xFF525659" top-toolbar-height="56" full-frame="" internalinstanceid="21" title="CHROME"></embed>
+                                        
+                                    )
+                                }
+                                
                             </div>
                             <div className="col-4">{chat.chat_date}</div>
                         </div>

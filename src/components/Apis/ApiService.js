@@ -27,3 +27,17 @@ export const PostApiService = async (url, body) => {
 
     return data;
 }
+
+export const PostAttachmentService = async (url, body) => {
+    const response = await fetch(url, {
+        method: "POST",
+        body: body,
+        headers: {
+            "Authorization": "b8416f2680eb194d61b33f9909f94b9d"
+          }
+    });
+
+    const data = await response.json();
+
+    return data;
+}
