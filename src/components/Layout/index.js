@@ -5,6 +5,7 @@ import Header from "./Header";
 import { useNavigate, useParams } from "react-router-dom";
 import { PostApiService, PostAttachmentService } from "../Apis/ApiService";
 import UserChat from "./UserChat";
+import { useDispatch, useSelector } from "react-redux";
 
 const Layout = ({ children }) => {
 
@@ -19,6 +20,8 @@ const Layout = ({ children }) => {
     const [fileStatus, setFileStatus] = useState(0);
     const [fileObject, setFileObject] = useState({ "obj": "" });
     const [file, setFile] = useState();
+
+    const dispatch = useDispatch();
 
 
     useEffect(() => {
@@ -108,8 +111,10 @@ const Layout = ({ children }) => {
 
             if (data.status === 1) {
 
-                window.location.reload(`/user-chat/${chatId}`);
-
+                navigate(`/user-chat/${chatId}`);
+                // dispatch({ type: "CHATLIST", payload: userChat });
+                // window.location.reload(`/user-chat/${chatId}`);             
+                
                 setMessage("");
                 console.log(data.message);
             } else {
@@ -119,53 +124,59 @@ const Layout = ({ children }) => {
 
         // if (fileStatus === 0) {
 
-            // const body = JSON.stringify({
-            //     sender_id: senderId,
-            //     chat_id: chatId,
-            //     receiver_id: receiverId,
-            //     message: message
+        // const body = JSON.stringify({
+        //     sender_id: senderId,
+        //     chat_id: chatId,
+        //     receiver_id: receiverId,
+        //     message: message
 
-            // });
-            // await PostApiService(url, body).then((data) => {
+        // });
+        // await PostApiService(url, body).then((data) => {
 
-            //     if (data.status === 1) {
-            //         // navigate(`/user-chat/${chatId}`);
-            //         window.location.reload(`/user-chat/${chatId}`);
-            //         // window.Location.replace(`/user-chat/${chatId}`);
-            //         setMessage("");
-            //         console.log(data.message);
-            //     } else {
-            //         console.log(data.message);
-            //     }
-            // });
-            // const url = "/ProjectApis/v1/saveUserChat";
-            // const body = {file: file,sender_id: senderId,chat_id: chatId,receiver_id: receiverId,message: message};
+        //     if (data.status === 1) {
+        //         // navigate(`/user-chat/${chatId}`);
+        //         window.location.reload(`/user-chat/${chatId}`);
+        //         // window.Location.replace(`/user-chat/${chatId}`);
+        //         setMessage("");
+        //         console.log(data.message);
+        //     } else {
+        //         console.log(data.message);
+        //     }
+        // });
+        // const url = "/ProjectApis/v1/saveUserChat";
+        // const body = {file: file,sender_id: senderId,chat_id: chatId,receiver_id: receiverId,message: message};
 
-            // fetch('/ProjectApis/v1/saveUserChat', {
-            //     method: 'POST',
-            //     body: {file: file,sender_id: senderId,chat_id: chatId,receiver_id: receiverId,message: message},
-            //     // 👇 Set headers manually for single file upload
-            //     headers: {
-            //         "Authorization": "b8416f2680eb194d61b33f9909f94b9d",
-            //         "Content-Type": "multipart/form-data",
-            //     }
-            // }).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.error(err));
+        // fetch('/ProjectApis/v1/saveUserChat', {
+        //     method: 'POST',
+        //     body: {file: file,sender_id: senderId,chat_id: chatId,receiver_id: receiverId,message: message},
+        //     // 👇 Set headers manually for single file upload
+        //     headers: {
+        //         "Authorization": "b8416f2680eb194d61b33f9909f94b9d",
+        //         "Content-Type": "multipart/form-data",
+        //     }
+        // }).then((res) => res.json()).then((data) => console.log(data)).catch((err) => console.error(err));
         // } else {
-            // fetch('/ProjectApis/v1/saveUserChatMediaData', {
-            //     method: 'POST',
-            //     body: {file: file,sender_id: senderId,chat_id: chatId,receiver_id: receiverId,message: message},
-            //     // 👇 Set headers manually for single file upload
-            //     headers: {
-            //         "Authorization": "b8416f2680eb194d61b33f9909f94b9d",
-            //         "Content-Type": "multipart/form-data",
-            //     }
-            // })
-            //     .then((res) => res.json())
-            //     .then((data) => console.log(data))
-            //     .catch((err) => console.error(err));
+        // fetch('/ProjectApis/v1/saveUserChatMediaData', {
+        //     method: 'POST',
+        //     body: {file: file,sender_id: senderId,chat_id: chatId,receiver_id: receiverId,message: message},
+        //     // 👇 Set headers manually for single file upload
+        //     headers: {
+        //         "Authorization": "b8416f2680eb194d61b33f9909f94b9d",
+        //         "Content-Type": "multipart/form-data",
+        //     }
+        // })
+        //     .then((res) => res.json())
+        //     .then((data) => console.log(data))
+        //     .catch((err) => console.error(err));
         // }
 
     }
+
+    // let userChat = useSelector((state) => {
+    //     return state.usersData.chatList;
+    // });
+
+    // console.log("refresh data", userChat);
 
 
 

@@ -226,6 +226,7 @@ a.article:hover {
 }
 
 .first-division button {
+
     align-self: flex-start;
     display: flex;
     align-items: center;
@@ -234,18 +235,16 @@ a.article:hover {
     border: 1px solid rgb(0, 208, 255);
     cursor: pointer;
     
-  }
+}
   
-  .second-division button {
+.second-division button {
     color: red;
     border: 1px solid red;
     cursor: pointer;
 
-  }
+}
 
-  /* .services {
+.button-container {
     display: flex;
-    justify-content: space-between;
-    margin-left: 12rem;
-    margin-top: -2rem;
-  } */
+    gap: 10px; /* Adjust the gap to control the space between buttons */
+}

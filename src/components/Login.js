@@ -62,6 +62,7 @@ const Login = () => {
                 var chat_id = res[0]['id'];
                 setShowMsg(false);
                 navigate(`/user-chat/${chat_id}`, { replace: true });
+                // navigate('/sample', { replace: true });
             }
         });
     }
